@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="examplexmld\Persons.xmld" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UDir.XmlDataImport\UDir.XmlDataImport.csproj">

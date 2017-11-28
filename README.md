@@ -42,13 +42,32 @@ Fra SQL Server Management Studio er det lett å ekstraher XML test data for bruk
 ## Kommandolinje  
 ### Bruk fra kommandolinje
 Bruk med en enkel xmld fil:  
-```UDir.XmlDataImport.Console.exe .\examplexmld\mytable.xmld```  
+```UDir.XmlDataImport.Console.exe .\examplexmld\Persons.xmld```  
 Bruk med flere xmld filer:  
-```UDir.XmlDataImport.Console.exe .\examplexmld\mytable.xmld .\examplexmld\under\myothertable.xmld```  
+```UDir.XmlDataImport.Console.exe .\examplexmld\Persons.xmld .\examplexmld\under\othertable.xmld```  
 Bruk med en mappe (kjør inn data fra alle .xmld filer i mappen):  
 ```UDir.XmlDataImport.Console.exe .\examplexmld\```  
 Bruk med flere mapper:  
 ```UDir.XmlDataImport.Console.exe .\examplexmld\ .\examplexmld\under\```  
+
+## Konfigurasjon  
+### App.config  
+Når du kjører XmlDataImport i en test eller fra kommando linjen, må du hat litt konfigurasjon i din App.config fil. Du må legge til en ```connectionString``` element i ```connectionStrings```. Du må også legg til en referanse med navn til connectionString'en i en setting med nøkkel ```DBInstanceName``` element blant ````appSettings````:   
+
+	<configuration>
+	  	<connectionStrings>
+	    	<add name="MYDB" connectionString="Data Source=(local);Initial Catalog=MYDB;Integrated Security=True;User Instance=False" providerName="System.Data.SqlClient" />
+	  	</connectionStrings>
+	  	<appSettings>
+    		<add key="DBInstanceName" value="MYDB" />
+    		<add key="ignoreNoChange" value="false" />
+	  	</appSettings>
+	</configuration>
+
+Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i databasen etter du har lanserer XmlDataImport. Dersom parameter er satt til true, så vil du få en varsel når kjøring resulterer i ingen endring:
+
+	No records inserted. There were 0 statements issued against the DB. Paths used: Persons.xmld
+
 
 ## XMLD fil
 ### XMLD fil eksempel
@@ -119,9 +138,9 @@ Bruk en ```SELECT``` mellom ```(...)```:
 ### Variabler  
 Du kan, om du vil, definere string variabler i en dictionary argument sendt inn i konstruktøren til XmlInsert:  
 
-			_xmlDataImport = new XmlInsert(true,
-									new Dictionary<string, string> { { "StudentId", _studentId } }, //Variable i XMLD fil
-									TestConstants.TestDataDir + "\\xmld\\Application\\status.xmld");
+	_xmlDataImport = new XmlInsert(true,
+			new Dictionary<string, string> { { "StudentId", _studentId } }, //Variable i XMLD fil
+			TestConstants.TestDataDir + "\\xmld\\Application\\status.xmld");
 
 Variabler skal benyttes i ```variable()``` ekspresjoner inn i XMLD filen:  
 
