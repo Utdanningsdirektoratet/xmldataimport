@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/UDir.XmlDataImport/obj/Debug
+/UDir.XmlDataImport.Console/obj/Debug
+/packages
+/UDir.XmlDataImport/bin/Debug
+/UDir.XmlDataImport.Console/bin/Debug
+/UDir.XmlDataImport/bin/Release
+/UDir.XmlDataImport/obj/Release
+/UDir.XmlDataImport.Console/bin/Release
+/UDir.XmlDataImport.Console/obj/Release
+/.vs/XmlDataImport/v14/.suo
