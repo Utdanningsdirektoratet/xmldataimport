@@ -145,7 +145,7 @@ Du kan, om du vil, definere string variabler i en dictionary argument sendt inn 
 Variabler skal benyttes i ```variable()``` ekspresjoner inn i XMLD filen:  
 
 	<Setup>
-	  DELETE FROM Answers WHERE StudentId = variable('FirstCandidateNumber');
+	  DELETE FROM Answers WHERE StudentId = variable('StudentId');
 	</Setup>
 	<Answers>
 		<AnswerId>1a2c8a68-c1de-4c9d-ad52-353c59f52f7b</AnswerId>
