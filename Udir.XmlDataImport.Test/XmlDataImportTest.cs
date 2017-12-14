@@ -34,7 +34,7 @@ namespace Udir.XmlDataImport.Test
         }
 
         [TestMethod]
-        public void must_insert_expected_variable_values()
+        public void must_insert_expected_sql_variable_values()
         {
             var variableValueCount = _xmlInsert.DataContext.GetCount(new List<string>
             {
@@ -42,6 +42,28 @@ namespace Udir.XmlDataImport.Test
             });
 
             Assert.AreEqual(2, variableValueCount, "Failed to insert the two expected variable values when" +
+                " insert of Persons.xmld ran.");
+        }
+
+        [TestMethod]
+        public void must_insert_expected_string_code_variable_value()
+        {
+            var lastNameValue = _xmlInsert.DataContext.ExecuteScalar(
+                string.Format("SELECT LastName FROM Persons WHERE LastName = '{0}'", _otherLastName)
+            );
+
+            Assert.AreEqual(_otherLastName, lastNameValue, "Failed to insert string variable value from code when" +
+                " insert of Persons.xmld ran.");
+        }
+
+        [TestMethod]
+        public void must_insert_expected_int_code_variable_value()
+        {
+            var ageValue = _xmlInsert.DataContext.ExecuteScalar(
+                string.Format("SELECT age FROM Persons WHERE age = {0}", _age)
+            );
+
+            Assert.AreEqual(_age, ageValue, "Failed to insert int variable value from code when" +
                 " insert of Persons.xmld ran.");
         }
     }

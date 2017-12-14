@@ -18,7 +18,7 @@ namespace UDir.XmlDataImport
 
         const string VariableFunctionSignature = "variable\\s?\\(\\'[a-zA-Z_0-9]*\\'\\)";
 
-        const string SqlInsertTemplate = "INSERT INTO {0} ({1}) VALUES({2})";
+        const string SqlInsertTemplate = "INSERT INTO {0} ({1}) VALUES({2});";
 
         private readonly string[] _paths;
         private readonly IFileProvider _fileProvider;        
@@ -130,6 +130,8 @@ namespace UDir.XmlDataImport
             var columnList = new List<string>();
             var valueList = new List<string>();
             var excluded = new List<string> { Startup, Setup, Teardown, VariableNode };
+            var tempQueries = new List<string>();
+
             foreach (var xmlNode in xmlNodes.Where(x => !excluded.Contains( x.Name.ToLower())))
             {
                 foreach (var childNode in xmlNode.ChildNodes)
@@ -138,14 +140,19 @@ namespace UDir.XmlDataImport
                     columnList.Add(string.Format("[{0}]",((XmlElement) childNode).Name));
                     valueList.Add(GetFormattedValue(childNode));
                 }
-
-                var variableDeclarations = GetVariableDeclarations(variables);
-                sqlPack.Inserts.Add(variableDeclarations + string.Format(SqlInsertTemplate, xmlNode.Name,
+                
+                tempQueries.Add(string.Format(SqlInsertTemplate, xmlNode.Name,
                     string.Join(",", columnList), string.Join(",", valueList)));
 
                 columnList.Clear();
                 valueList.Clear();
             }
+
+            var variableDeclarations = GetVariableDeclarations(variables);
+
+            var joinedQuery = string.Join("\n", tempQueries);
+
+            sqlPack.Inserts.Add(variableDeclarations + "\n" + joinedQuery);            
         }
 
         private void ExecPack(SqlPack sqlPack)
