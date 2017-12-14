@@ -75,6 +75,7 @@ Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i
 	<?xml version="1.0" encoding="utf-8" ?>
 	<Root>
 	  <![CDATA[ Eventuelle kommentarer kan legges inn sånn. Se hvordan vi håndterer 'større enn' tegn med &gt;]]>
+	<Variables>Declare @studentId int = 123</Variables>
 	<Setup>
 	  DECLARE @Group uniqueidentifier = 'EB26BB94-51D6-4507-9057-4F3CC52D0821';
 	  DELETE FROM Answers WHERE Group = @Group;
@@ -95,7 +96,7 @@ Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i
 	 	<Group>EB26BB94-51D6-4507-9057-4F3CC52D0821</Group>
 		<GroupDesc>Gruppe med veeeeldig langt navn;EV;NOR1033;Norsk tegnspråk</GroupDesc>
 		<DeliveryTime>GETDATE()</DeliveryTime>
-		<StudentId>123</StudentId>		
+		<StudentId>@studentId</StudentId>		
 		<Status>1</Status>
 	</Answers>
 	</Root>
@@ -104,6 +105,7 @@ Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i
 En XLMD fil innholder:
 
 1. En ````<Root>```` tag på begynnelse og slut
+1. Valgfritt ````<Variables>```` tag som inneholder deklarasjoner av variabler. Variablene er tilgjengelig innenfor __alle__ andre taggene. 
 1. En valgfrit ````<Startup>```` tag med SQL som innhold. Applikasjonen kjører denne SQL i en egen transaksjon **før** innsetting av tabell data.
 1. En valgfrit ````<Setup>```` tag med opprydding SQL som innhold. Applikasjonen kjører denne SQL i en egen transaksjon **før** og **etter** innsetting av tabell data.
 1. En valgfrit ````<Teardown>```` tag med opprydding SQL som innhold. Applikasjonen kjører denne SQL i en egen transaksjon **på siste**.
@@ -136,10 +138,16 @@ Bruk en ```SELECT``` mellom ```(...)```:
 	</ConvertedAnswer>
 
 ### Variabler  
-Du kan, om du vil, definere string variabler i en dictionary argument sendt inn i konstruktøren til XmlInsert:  
+Du kan, om du vil, definere SQL variabler inn i ````<Variables>```` tag:  
+ 
+	<Variables>Declare @age int = 12</Variables>
+
+Disse variablene skal være tilgjengelig i alle andre steder (````<Startup>````, ````<Setup>````, ````<Teardown>```` og også inn i ```<TabellNavn>```).
+
+Verktøyet også støtter en helt annen slags variable du kan skytte inn fra din enhetstestskode.  Du kan definere variabler i en dictionary argument sendt inn i konstruktøren til XmlInsert:  
 
 	_xmlDataImport = new XmlInsert(true,
-			new Dictionary<string, string> { { "StudentId", _studentId } }, //Variable i XMLD fil
+			new Dictionary<string, object> { { "StudentId", _studentId } }, //Variable i XMLD fil
 			TestConstants.TestDataDir + "\\xmld\\Application\\status.xmld");
 
 Variabler skal benyttes i ```variable()``` ekspresjoner inn i XMLD filen:  
@@ -196,5 +204,15 @@ Resultat:
 	  <Schools>
 	    <SchoolID>9876</SchoolID>
 	    <SchoolName>Blabla School</SchoolName>
+		<Location>Larvik</Location>
+	  </Schools>
+	</Root>
+
+Om du har auto-genererte id'er i din database, bare slett dem og verktøyet vil ikke prøve å legger inn en verdi for kolonnen:
+
+	<Root>
+	  <Schools>
+	    <SchoolName>Blabla School</SchoolName>
+		<Location>Larvik</Location>
 	  </Schools>
 	</Root>
