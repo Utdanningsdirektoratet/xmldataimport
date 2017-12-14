@@ -12,3 +12,5 @@
 /UDir.XmlDataImport.Console/bin/Release
 /UDir.XmlDataImport.Console/obj/Release
 /.vs/XmlDataImport/v14/.suo
+/Udir.XmlDataImport.Test/bin/Debug
+/Udir.XmlDataImport.Test/obj/Debug

@@ -9,6 +9,7 @@ namespace UDir.XmlDataImport
     public class XmlInsert : IDisposable
     {
         const string Setup = "setup";
+        const string VariableNode = "variables";
         const string Startup = "startup";
         const string Teardown = "teardown";
 
@@ -25,7 +26,7 @@ namespace UDir.XmlDataImport
         private readonly bool _ignoreNoChange;
         private readonly SqlPack _sqlPack;
 
-        private Dictionary<string, string> Variables { get; }
+        private Dictionary<string, object> Variables { get; }
 
         /// <summary>
         /// Use this constructor to just run some SQL.
@@ -69,18 +70,18 @@ namespace UDir.XmlDataImport
         /// <param name="variables">Collection of variables to use in script</param>
         /// <param name="path">Directory, individual file path, array of individual files 
         /// or array of directories</param>
-        public XmlInsert(bool ignoreNoChange, Dictionary<string, string> variables, params string[] path) : this(new FileProvider(), new ImportDataContext(), ignoreNoChange, variables, path)
+        public XmlInsert(bool ignoreNoChange, Dictionary<string, object> variables, params string[] path) : this(new FileProvider(), new ImportDataContext(), ignoreNoChange, variables, path)
         {
         }
 
-        XmlInsert(IFileProvider fileProvider, IImportDataContext dataContext, bool ignoreNoChange, Dictionary<string, string> variables = null, params string[] path)
+        XmlInsert(IFileProvider fileProvider, IImportDataContext dataContext, bool ignoreNoChange, Dictionary<string, object> variables = null, params string[] path)
         {            
             _paths = path;
             _fileProvider = fileProvider;
             DataContext = dataContext;
             _ignoreNoChange = ignoreNoChange;
             _sqlPack = new SqlPack();
-            Variables = variables ?? new Dictionary<string, string>();
+            Variables = variables ?? new Dictionary<string, object>();
 
             ParseXmlSql(_sqlPack);
 
@@ -112,21 +113,23 @@ namespace UDir.XmlDataImport
 
                 var xmlNodes = GetChildNodes(xmlDocument.DocumentElement);
 
-                AddScripts(sqlPack.StartupScripts, RetrieveNodeContent(xmlNodes, Startup));
+                AddScripts(sqlPack.Variables, RetrieveNodeContent(xmlNodes, VariableNode));
 
-                AddScripts(sqlPack.SetupScripts, RetrieveNodeContent(xmlNodes, Setup));
+                AddScripts(sqlPack.StartupScripts, RetrieveNodeContent(xmlNodes, Startup), sqlPack.Variables);
 
-                AddScripts(sqlPack.TearDownScripts, RetrieveNodeContent(xmlNodes, Teardown));
+                AddScripts(sqlPack.SetupScripts, RetrieveNodeContent(xmlNodes, Setup), sqlPack.Variables);
 
-                AddInsertScripts(sqlPack, xmlNodes);
+                AddScripts(sqlPack.TearDownScripts, RetrieveNodeContent(xmlNodes, Teardown), sqlPack.Variables);
+
+                AddInsertScripts(sqlPack, xmlNodes, sqlPack.Variables);
             }
         }
 
-        private void AddInsertScripts(SqlPack sqlPack, List<XmlElement> xmlNodes)
+        private void AddInsertScripts(SqlPack sqlPack, List<XmlElement> xmlNodes, List<string> variables = null)
         {
             var columnList = new List<string>();
             var valueList = new List<string>();
-            var excluded = new List<string> { Startup, Setup, Teardown };
+            var excluded = new List<string> { Startup, Setup, Teardown, VariableNode };
             foreach (var xmlNode in xmlNodes.Where(x => !excluded.Contains( x.Name.ToLower())))
             {
                 foreach (var childNode in xmlNode.ChildNodes)
@@ -136,7 +139,8 @@ namespace UDir.XmlDataImport
                     valueList.Add(GetFormattedValue(childNode));
                 }
 
-                sqlPack.Inserts.Add(string.Format(SqlInsertTemplate, xmlNode.Name,
+                var variableDeclarations = GetVariableDeclarations(variables);
+                sqlPack.Inserts.Add(variableDeclarations + string.Format(SqlInsertTemplate, xmlNode.Name,
                     string.Join(",", columnList), string.Join(",", valueList)));
 
                 columnList.Clear();
@@ -167,6 +171,11 @@ namespace UDir.XmlDataImport
             var value = ((XmlElement)childNode).InnerText;
 
             var functionSegment = value.Length > 100 ? value.Substring(0, 100) : value;
+
+            if (functionSegment.Trim().StartsWith("@")) //Variable
+            {
+                return value;
+            }
 
             if (!Regex.IsMatch(functionSegment, SqlFunctionSignature))
             {
@@ -217,12 +226,31 @@ namespace UDir.XmlDataImport
             return DataContext.ExecBatch(pack);
         }
 
-        private static void AddScripts(List<string> collection, string currentSetupSql)
+        private static void AddScripts(List<string> collection, string currentSetupSql, List<string> variables = null)
         {
+
             if (!string.IsNullOrEmpty(currentSetupSql))
             {
-                collection.Add(currentSetupSql);
+                var variableDeclaration = GetVariableDeclarations(variables);
+                collection.Add(variableDeclaration + currentSetupSql);
             }
+        }
+
+        private static string GetVariableDeclarations(List<string> variables)
+        {
+            var variableDeclaration = string.Empty;
+
+            if (variables != null && variables.Any())
+            {
+                variableDeclaration = string.Join(";", variables);
+
+                if (!variableDeclaration.TrimEnd().EndsWith(";"))
+                {
+                    variableDeclaration += ";";
+                }
+            }
+           
+            return variableDeclaration;
         }
 
         private string RetrieveNodeContent(List<XmlElement> xmlNodes, string nodeName)

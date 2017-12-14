@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- SELECT TOP 4 * FROM Persons FOR XML PATH('Persons'), ROOT('Root') -->
 <Root>
-  <Variables>Declare @age int = 12</Variables>
+  <Variables>DECLARE @age int = 12; DECLARE @LastName varchar(40) = 'Smith'</Variables>
   <Setup>DELETE FROM Persons WHERE ID &gt; @age</Setup>
   <Persons>
     <FirstName>James</FirstName>
@@ -10,17 +10,17 @@
   </Persons>
   <Persons>
     <FirstName>Åggie</FirstName>
-    <LastName>Smith</LastName>
+    <LastName>variable('otherLastName')</LastName>
     <Age>56</Age>
   </Persons>
   <Persons>    
     <FirstName>Ærild</FirstName>
-    <LastName>Smith</LastName>
-    <Age>13</Age>
+    <LastName>@LastName</LastName>
+    <Age>Convert(int, variable('age'))</Age>
   </Persons>
   <Persons>    
     <FirstName>Alex</FirstName>
-    <LastName>Smith</LastName>
+    <LastName>@LastName</LastName>
     <Age>43</Age>
   </Persons>
 </Root>
