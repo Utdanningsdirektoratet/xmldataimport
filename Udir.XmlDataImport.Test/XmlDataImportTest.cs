@@ -27,6 +27,12 @@ namespace Udir.XmlDataImport.Test
                 );
         }
 
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            _xmlInsert.Dispose();
+        }
+
         [TestMethod]
         public void must_insert_expected_variable_values()
         {
