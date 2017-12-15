@@ -131,7 +131,7 @@ Bruk en ```SELECT``` mellom ```(...)```:
 	    <GroupDesc>Gruppe med veeeeldig langt navn;EV;NOR1033;Norsk tegnspråk</GroupDesc>
 	</Answers>
 	<ConvertedAnswer>
-	     <AnswerId>(SELECT a.AnswerId FROM Answers a WHERE b.AnswerId = '1a2c8a68-c1de-4c9d-ad52-353c59f52f7b')</AnswerId>
+	     <AnswerId>(SELECT AnswerId FROM Answers WHERE Group = 'EB26BB94-51D6-4507-9057-4F3CC52D0821')</AnswerId>
 	    <ConvertedDocument>Convert(varbinary, 'PD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8T3ucz4=')</ConvertedDocument>
 	    <DeliveryTime>1974-12-31T12:10:00.000</DeliveryTime>
 	    <Status>2</Status>
@@ -178,7 +178,7 @@ Variabler er nyttige for å kunne bruke den samme XMLD fil i forskjellige test s
 			var group = new Guid("9BA98065-0D07-4360-B2D4-B6198B8D1082");
 
 			using (new XmlInsert(false,
-				new Dictionary<string, string>
+				new Dictionary<string, object>
 				{
 					{"FirstCandidateNumber", firstCandidateNumber},
 					{"FirstCandidateStatus", firstCandidateStatus}
