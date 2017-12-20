@@ -52,7 +52,7 @@ Bruk med flere mapper:
 
 ## Konfigurasjon  
 ### App.config  
-Når du kjører XmlDataImport i en test eller fra kommando linjen, må du hat litt konfigurasjon i din App.config fil. Du må legge til en ```connectionString``` element i ```connectionStrings```. Du må også legg til en referanse med navn til connectionString'en i en setting med nøkkel ```DBInstanceName``` element blant ````appSettings````:   
+Når du kjører XmlDataImport i en test eller fra kommando linjen, må du ha litt konfigurasjon i din App.config fil. Du må legge en ```connectionString``` element inn i ```connectionStrings```. Du må også legg til en referanse til connectionString'en i en  ```DBInstanceName``` setting blant ````appSettings````:   
 
 	<configuration>
 	  	<connectionStrings>
@@ -64,7 +64,7 @@ Når du kjører XmlDataImport i en test eller fra kommando linjen, må du hat li
 	  	</appSettings>
 	</configuration>
 
-Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i databasen etter du har lanserer XmlDataImport. Dersom parameter er satt til true, så vil du få en varsel når kjøring resulterer i ingen endring:
+Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i databasen etter du har lanserert XmlDataImport. Dersom parameter er satt til true, så vil du få en varsel når kjøring resulterer i ingen endring:
 
 	No records inserted. There were 0 statements issued against the DB. Paths used: Persons.xmld
 
