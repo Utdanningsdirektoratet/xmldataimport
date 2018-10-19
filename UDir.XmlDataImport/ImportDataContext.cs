@@ -34,7 +34,8 @@ namespace UDir.XmlDataImport
                 conn.Open();
                 batch.ForEach(statement =>
                 {
-                    count += (int) _db.ExecuteScalar(CommandType.Text, statement);
+                    object result = _db.ExecuteScalar(CommandType.Text, statement);
+                    count += int.Parse(result.ToString());
                 });
             }
 
@@ -72,7 +73,7 @@ namespace UDir.XmlDataImport
 
         public int Exec(DbTransaction trans, string sql)
         {
-            return _db.ExecuteNonQuery(trans, CommandType.Text, sql);
+            return _db.ExecuteNonQuery(trans, CommandType.Text, sql.Trim());
         }
 
         public object ExecuteScalar(string sql)

@@ -93,12 +93,12 @@ namespace UDir.XmlDataImport
             {
                 if (_sqlPack.SetupScripts != null)
                 {
-                    RunScriptPack(_sqlPack.SetupScripts);
+                    RunScriptPack(OracleHelpers.Blockify(_sqlPack.SetupScripts));
                 }
 
                 if (_sqlPack.TearDownScripts != null)
                 {
-                    RunScriptPack(_sqlPack.TearDownScripts);
+                    RunScriptPack(OracleHelpers.Blockify(_sqlPack.TearDownScripts));
                 }
             }
         }
@@ -137,7 +137,8 @@ namespace UDir.XmlDataImport
                 foreach (var childNode in xmlNode.ChildNodes)
                 {
                     //Escape column names with [ColName] to avoid keyword problems
-                    columnList.Add(string.Format("[{0}]",((XmlElement) childNode).Name));
+                    //columnList.Add(string.Format("[{0}]",((XmlElement) childNode).Name));
+                    columnList.Add(((XmlElement)childNode).Name);
                     valueList.Add(GetFormattedValue(childNode));
                 }
                 
@@ -159,11 +160,11 @@ namespace UDir.XmlDataImport
         {
             var changedCount = 0;
 
-            changedCount += RunScriptPack(sqlPack.StartupScripts);
+            changedCount += RunScriptPack(OracleHelpers.Blockify(sqlPack.StartupScripts));
 
-            changedCount += RunScriptPack(sqlPack.SetupScripts);
+            changedCount += RunScriptPack(OracleHelpers.Blockify(sqlPack.SetupScripts));
 
-            changedCount += DataContext.ExecBatch(sqlPack.Inserts);
+            changedCount += DataContext.ExecBatch(OracleHelpers.Blockify(sqlPack.Inserts));
 
             if (!_ignoreNoChange && changedCount == 0)
             {
@@ -284,6 +285,6 @@ namespace UDir.XmlDataImport
                 (from XmlNode childNode in rootNode.ChildNodes
                     where childNode.Name != "XmlNode"
                     select childNode as XmlElement).Where(n => n != null).ToList();
-        }
+        }        
     }
 }

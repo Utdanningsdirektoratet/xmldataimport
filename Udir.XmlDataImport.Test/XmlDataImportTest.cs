@@ -23,7 +23,7 @@ namespace Udir.XmlDataImport.Test
                     {"age", _age},
                     {"otherLastName", _otherLastName }
                 },
-                path + "\\examplexmld" //Currently just contains Persons.xmld
+                path + "\\examplexmld" //Currently just contains Persons.xmld. Add \\ora for Oracle
                 );
         }
 
@@ -38,7 +38,7 @@ namespace Udir.XmlDataImport.Test
         {
             var variableValueCount = _xmlInsert.DataContext.GetCount(new List<string>
             {
-                "SELECT COUNT(*) FROM Persons WHERE LastName = 'SMITH'"
+                "SELECT COUNT(*) FROM Persons WHERE LastName = 'Smith'"
             });
 
             Assert.AreEqual(2, variableValueCount, "Failed to insert the two expected variable values when" +
@@ -52,7 +52,7 @@ namespace Udir.XmlDataImport.Test
                 string.Format("SELECT LastName FROM Persons WHERE LastName = '{0}'", _otherLastName)
             );
 
-            Assert.AreEqual(_otherLastName, lastNameValue, "Failed to insert string variable value from code when" +
+            Assert.AreEqual(_otherLastName, lastNameValue.ToString(), "Failed to insert string variable value from code when" +
                 " insert of Persons.xmld ran.");
         }
 
@@ -63,7 +63,7 @@ namespace Udir.XmlDataImport.Test
                 string.Format("SELECT age FROM Persons WHERE age = {0}", _age)
             );
 
-            Assert.AreEqual(_age, ageValue, "Failed to insert int variable value from code when" +
+            Assert.AreEqual(_age, int.Parse(ageValue.ToString()), "Failed to insert int variable value from code when" +
                 " insert of Persons.xmld ran.");
         }
     }
