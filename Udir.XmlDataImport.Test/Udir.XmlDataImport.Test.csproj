@@ -63,6 +63,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="XmlDataImportOraTest.cs" />
     <Compile Include="XmlDataImportTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,12 +71,14 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="examplexmld\Persons.xmld">
+    <None Include="examplexmld\ora\Employees.xmld">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="examplexmld\ora\Persons.xmld">
+    <None Include="examplexmld\ora\Persons\Persons.xmld">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
+    </None>
+    <None Include="examplexmld\Persons.xmld">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

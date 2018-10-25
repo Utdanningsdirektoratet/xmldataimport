@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace UDir.XmlDataImport
@@ -20,21 +21,39 @@ namespace UDir.XmlDataImport
 
             return sqlPackInserts;
         }
-
         static string FormatAnonBlock(string userData)
         {
+            string[] blocks = userData.Split('|');            
+            
             StringBuilder sb = new StringBuilder();
-            sb.Append("Begin ");
-            string[] statements = userData.Split(';');
-            foreach (string s in statements)
+
+            if (blocks.Length == 2)
+            {
+                sb.Append(blocks[0]);
+            }
+            
+            sb.Append("BEGIN ");
+            string[] statements = blocks.Length == 1 ? blocks[0].Split(';') : blocks[1].Split(';');
+            foreach (string s in statements.Where(x => !x.ToLower().StartsWith("declare")))
             {
                 if (s.Length > 0)
                 {
-                    sb.AppendFormat(" EXECUTE IMMEDIATE '{0}';", s.Replace("'", "''"));
+                    sb.AppendFormat(" {0}; ", s);
                 }
             }
             sb.Append(" END ; ");
             return sb.ToString();
         }
+
+        public static string DelimitVariableBlock(string variableDeclarations, string joinedQuery)
+        {
+            if (Settings.DbVendor.ToLower() == "oracle" && !joinedQuery.ToLower().StartsWith("declare"))
+            {
+                return variableDeclarations + "|" + joinedQuery;
+            }
+
+            return variableDeclarations + "\n" + joinedQuery;
+        }
+      
     }
 }

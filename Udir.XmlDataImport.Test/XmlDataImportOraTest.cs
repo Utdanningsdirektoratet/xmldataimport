@@ -6,12 +6,13 @@ using UDir.XmlDataImport;
 
 namespace Udir.XmlDataImport.Test
 {
-    [TestClass]
-    public class XmlDataImportTest
+    //Uncomment if running Oracle
+    //[TestClass]
+    public class XmlDataImportOraTest
     {
         private static XmlInsert _xmlInsert;
-        private static int _age = 13;
-        private static string _otherLastName = "Ingebretsen";
+        private static int _maxSalary = 9000;
+        private static string _lastName = "Nordmann";
 
         [ClassInitialize]
         public static void Startup(TestContext context)
@@ -20,17 +21,17 @@ namespace Udir.XmlDataImport.Test
             _xmlInsert = new XmlInsert(true,
                 new Dictionary<string, object>
                 {
-                    {"age", _age},
-                    {"otherLastName", _otherLastName }
+                    {"maxSalary", _maxSalary},
+                    {"lastName", _lastName }
                 },
-                path + "\\examplexmld" //Currently just contains Persons.xmld. Add \\ora\\Persons for Oracle
+                path + "\\examplexmld\\ora"
                 );
         }
 
         [ClassCleanup]
         public static void Cleanup()
         {
-            _xmlInsert.Dispose();
+           _xmlInsert.Dispose();
         }
 
         [TestMethod]
@@ -38,33 +39,33 @@ namespace Udir.XmlDataImport.Test
         {
             var variableValueCount = _xmlInsert.DataContext.GetCount(new List<string>
             {
-                "SELECT COUNT(*) FROM Persons WHERE LastName = 'Smith'"
+                "SELECT COUNT(*) FROM HR.Employees WHERE FIRST_NAME = 'Odd'"
             });
 
-            Assert.AreEqual(2, variableValueCount, "Failed to insert the two expected variable values when" +
-                " insert of Persons.xmld ran.");
+            Assert.AreEqual(1, variableValueCount, "Failed to insert the expected variable values when" +
+                " insert of Employees.xmld ran.");
         }
 
         [TestMethod]
         public void must_insert_expected_string_code_variable_value()
         {
             var lastNameValue = _xmlInsert.DataContext.ExecuteScalar(
-                string.Format("SELECT LastName FROM Persons WHERE LastName = '{0}'", _otherLastName)
+                string.Format("SELECT LAST_NAME FROM HR.Employees WHERE LAST_NAME = '{0}'", _lastName)
             );
 
-            Assert.AreEqual(_otherLastName, lastNameValue.ToString(), "Failed to insert string variable value from code when" +
-                " insert of Persons.xmld ran.");
+            Assert.AreEqual(_lastName, lastNameValue.ToString(), "Failed to insert string variable value from code when" +
+                " insert of Employees.xmld ran.");
         }
 
         [TestMethod]
         public void must_insert_expected_int_code_variable_value()
         {
             var ageValue = _xmlInsert.DataContext.ExecuteScalar(
-                string.Format("SELECT age FROM Persons WHERE age = {0}", _age)
+                string.Format("SELECT MAX_SALARY FROM HR.Jobs WHERE MAX_SALARY = {0}", _maxSalary)
             );
 
-            Assert.AreEqual(_age, int.Parse(ageValue.ToString()), "Failed to insert int variable value from code when" +
-                " insert of Persons.xmld ran.");
+            Assert.AreEqual(_maxSalary, int.Parse(ageValue.ToString()), "Failed to insert int variable value from code when" +
+                " insert of Employees.xmld ran.");
         }
     }
 }

@@ -152,8 +152,8 @@ namespace UDir.XmlDataImport
             var variableDeclarations = GetVariableDeclarations(variables);
 
             var joinedQuery = string.Join("\n", tempQueries);
-
-            sqlPack.Inserts.Add(variableDeclarations + "\n" + joinedQuery);            
+            
+            sqlPack.Inserts.Add(OracleHelpers.DelimitVariableBlock(variableDeclarations,joinedQuery));            
         }
 
         private void ExecPack(SqlPack sqlPack)
@@ -240,7 +240,7 @@ namespace UDir.XmlDataImport
             if (!string.IsNullOrEmpty(currentSetupSql))
             {
                 var variableDeclaration = GetVariableDeclarations(variables);
-                collection.Add(variableDeclaration + currentSetupSql);
+                collection.Add(OracleHelpers.DelimitVariableBlock(variableDeclaration, currentSetupSql));
             }
         }
 
