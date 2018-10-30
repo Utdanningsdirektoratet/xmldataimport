@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace Udir.XmlDataImport.Core.Test
 {
-    public class XmlDataImportTest
+    public class XmlDataImportTest: IDisposable
     {
         private XmlInsert _xmlInsert;
         private static int _age = 13;
@@ -26,7 +27,7 @@ namespace Udir.XmlDataImport.Core.Test
 
         }
 
-        ~XmlDataImportTest()
+        public void Dispose()
         {
             _xmlInsert.Dispose();
         }
@@ -61,6 +62,5 @@ namespace Udir.XmlDataImport.Core.Test
 
             Assert.Equal(_age, int.Parse(ageValue.ToString()));
         }
-
     }
 }

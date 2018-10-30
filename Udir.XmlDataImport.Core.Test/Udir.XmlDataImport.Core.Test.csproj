@@ -20,6 +20,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="examplexmld\ora\Persons\Persons.xmld">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="examplexmld\Persons.xmld">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
