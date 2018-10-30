@@ -65,7 +65,6 @@
   <ItemGroup>
     <Compile Include="XmlDataImportOraTest.cs" />
     <Compile Include="XmlDataImportTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -91,6 +90,9 @@
   <ItemGroup>
     <Content Include="SetupOracle.sql" />
     <Content Include="Setup.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
