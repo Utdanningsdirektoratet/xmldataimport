@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Practices.EnterpriseLibrary.Data;
+using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+using Oracle.ManagedDataAccess.Client;
 
 namespace UDir.XmlDataImport
 {
@@ -19,11 +21,24 @@ namespace UDir.XmlDataImport
 
         public ImportDataContext()
         {
+            
+#if NETCORE
+            var connString = Settings.ConnString;
+            if (Settings.DbVendor.ToLower() == "oracle")
+            {
+                _db = new GenericDatabase(connString, new OracleClientFactory());
+            }
+            else
+            {
+                _db = new SqlDatabase(connString);
+            }
+#endif
+#if NETFULL
             // Configure the DatabaseFactory to read its configuration from the .config file 
             DatabaseProviderFactory factory = new DatabaseProviderFactory();
-
             // Create a Database object from the factory using the connection string name. 
             _db = factory.Create(Settings.DbInstanceName);
+#endif
         }
 
         public int GetCount(List<string> batch)

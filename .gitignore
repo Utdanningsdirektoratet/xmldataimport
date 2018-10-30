@@ -16,3 +16,10 @@
 /Udir.XmlDataImport.Test/obj/Debug
 /.vs/XmlDataImport/v15
 TestResults
+
+/Udir.XmlDataImport.Core.Test/obj
+/.vs/config/applicationhost.config
+/UDir.XmlDataImport/obj
+/Udir.XmlDataImport.Core.Test/bin
+/Udir.XmlDataImport.Test/bin/Release
+/Udir.XmlDataImport.Test/obj/Release
