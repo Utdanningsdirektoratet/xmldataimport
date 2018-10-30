@@ -1,5 +1,4 @@
 ﻿#if NETCORE
-using System.IO;
 using Microsoft.Extensions.Configuration;
 
 namespace UDir.XmlDataImport
