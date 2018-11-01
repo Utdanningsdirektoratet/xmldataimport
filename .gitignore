@@ -23,3 +23,5 @@ TestResults
 /Udir.XmlDataImport.Core.Test/bin
 /Udir.XmlDataImport.Test/bin/Release
 /Udir.XmlDataImport.Test/obj/Release
+.vscode/tasks.json
+.vscode/launch.json

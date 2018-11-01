@@ -107,24 +107,36 @@ namespace UDir.XmlDataImport
         {
             var xmlDocument = new XmlDocument();
 
-            foreach (var file in _fileProvider.GetFiles(_paths))
+            if (_paths.Length == 1 && _paths[0].ToLower().StartsWith("<?xml"))
             {
-                xmlDocument.Load(file);
-
-                var xmlNodes = GetChildNodes(xmlDocument.DocumentElement);
-
-                AddScripts(sqlPack.Variables, RetrieveNodeContent(xmlNodes, VariableNode));
-
-                AddScripts(sqlPack.StartupScripts, RetrieveNodeContent(xmlNodes, Startup), sqlPack.Variables);
-
-                AddScripts(sqlPack.SetupScripts, RetrieveNodeContent(xmlNodes, Setup), sqlPack.Variables);
-
-                AddScripts(sqlPack.TearDownScripts, RetrieveNodeContent(xmlNodes, Teardown), sqlPack.Variables);
-
-                AddInsertScripts(sqlPack, xmlNodes, sqlPack.Variables);
+                xmlDocument.LoadXml(_paths[0]);
+                ParseAllScripts(sqlPack, xmlDocument);
+            }
+            else
+            {
+                foreach (var file in _fileProvider.GetFiles(_paths))
+                {
+                    xmlDocument.Load(file);
+                    ParseAllScripts(sqlPack, xmlDocument);
+                }
             }
         }
 
+        private void ParseAllScripts(SqlPack sqlPack, XmlDocument xmlDocument)
+        {
+            var xmlNodes = GetChildNodes(xmlDocument.DocumentElement);
+
+            AddScripts(sqlPack.Variables, RetrieveNodeContent(xmlNodes, VariableNode));
+
+            AddScripts(sqlPack.StartupScripts, RetrieveNodeContent(xmlNodes, Startup), sqlPack.Variables);
+
+            AddScripts(sqlPack.SetupScripts, RetrieveNodeContent(xmlNodes, Setup), sqlPack.Variables);
+
+            AddScripts(sqlPack.TearDownScripts, RetrieveNodeContent(xmlNodes, Teardown), sqlPack.Variables);
+
+            AddInsertScripts(sqlPack, xmlNodes, sqlPack.Variables);
+        }
+        
         private void AddInsertScripts(SqlPack sqlPack, List<XmlElement> xmlNodes, List<string> variables = null)
         {
             var columnList = new List<string>();

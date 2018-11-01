@@ -16,3 +16,15 @@ CREATE TABLE Jobs (
 		FOREIGN KEY (PersonID)
 		REFERENCES Persons(ID)
 );
+
+CREATE SEQUENCE pers_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER pers_bir
+BEFORE INSERT ON Persons
+FOR EACH ROW
+
+BEGIN
+  SELECT pers_seq.NEXTVAL
+  INTO   :new.id
+  FROM   dual;
+END;

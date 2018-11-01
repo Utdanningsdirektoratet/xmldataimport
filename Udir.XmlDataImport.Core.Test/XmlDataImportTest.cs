@@ -62,5 +62,28 @@ namespace Udir.XmlDataImport.Core.Test
 
             Assert.Equal(_age, int.Parse(ageValue.ToString()));
         }
+
+        [Fact]
+        public void must_insert_string_xml()
+        {
+            var lastName = "Barns";
+            string ageValue;
+            using (new XmlInsert(
+                $@"<?xml version='1.0' encoding='utf-8' ?>
+                    <Root>
+                      <Setup>DELETE FROM Persons WHERE LastName = '{lastName}'</Setup>
+                        <Persons>
+                            <FirstName>Fred</FirstName>
+                            <LastName>Barns</LastName>
+                            <Age>{_age}</Age>
+                        </Persons>               
+                    </Root>"))
+            {
+                ageValue = _xmlInsert.DataContext
+                    .ExecuteScalar($"SELECT age FROM Persons WHERE LastName = '{lastName}'").ToString();                
+            }
+
+            Assert.Equal(_age, int.Parse(ageValue));
+        }
     }
 }

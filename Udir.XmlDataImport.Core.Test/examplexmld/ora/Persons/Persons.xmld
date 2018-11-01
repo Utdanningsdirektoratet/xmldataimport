@@ -4,25 +4,21 @@
   <Variables>DECLARE p_age numeric(10) := 12;</Variables>
   <Setup>DELETE FROM Jobs;DELETE FROM Persons WHERE Age &gt; p_age;</Setup>
   <Persons>
-    <ID>1</ID>
     <FirstName>James</FirstName>
     <LastName>Ohlsen</LastName>
     <Age>23</Age>
   </Persons>
   <Persons>
-    <ID>2</ID>
     <FirstName>Åggie</FirstName>
     <LastName>variable('otherLastName')</LastName>
     <Age>56</Age>
   </Persons>
   <Persons>
-    <ID>3</ID>
     <FirstName>Ærild</FirstName>
     <LastName>Smith</LastName>
     <Age>TO_NUMBER(variable('age'))</Age>
   </Persons>
   <Persons>
-    <ID>4</ID>
     <FirstName>Alex</FirstName>
     <LastName>Smith</LastName>
     <Age>43</Age>
