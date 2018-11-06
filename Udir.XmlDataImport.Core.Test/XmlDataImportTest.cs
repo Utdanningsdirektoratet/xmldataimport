@@ -85,5 +85,14 @@ namespace Udir.XmlDataImport.Core.Test
 
             Assert.Equal(_age, int.Parse(ageValue));
         }
+        
+        [Fact]
+        public void must_replace_env_variable_in_connection_string()
+        {
+            var connString = "Data Source=localhost:1521/XE;User Id=hr;Password=blabla%WINDIR%blabla";
+            var parsedConnString = ConnectionStringParser.parseConnectionString(connString);
+
+            Assert.NotEqual(connString, parsedConnString);
+        }
     }
 }

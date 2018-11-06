@@ -21,9 +21,8 @@ namespace UDir.XmlDataImport
 
         public ImportDataContext()
         {
-            
-#if NETCORE
-            var connString = Settings.ConnString;
+            var connString = ConnectionStringParser.parseConnectionString(Settings.ConnString);
+
             if (Settings.DbVendor.ToLower() == "oracle")
             {
                 _db = new GenericDatabase(connString, new OracleClientFactory());
@@ -32,15 +31,7 @@ namespace UDir.XmlDataImport
             {
                 _db = new SqlDatabase(connString);
             }
-#endif
-#if NETFULL
-            // Configure the DatabaseFactory to read its configuration from the .config file 
-            DatabaseProviderFactory factory = new DatabaseProviderFactory();
-            // Create a Database object from the factory using the connection string name. 
-            _db = factory.Create(Settings.DbInstanceName);
-#endif
         }
-
         public int GetCount(List<string> batch)
         {
             int count = 0;
