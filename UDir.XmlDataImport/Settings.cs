@@ -46,7 +46,7 @@ namespace UDir.XmlDataImport
 
         private static string _dbVendor;
         private static string DBVendorKeyName = "DBVendor";
-        private static string _connString
+        private static string _connString;
 
         /// <summary>
         /// Returns a string from the config file identifying the key of the connection string  to use.
