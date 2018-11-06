@@ -21,7 +21,7 @@ namespace UDir.XmlDataImport
 
         public ImportDataContext()
         {
-            var connString = ConnectionStringParser.parseConnectionString(Settings.ConnString);
+            var connString = ConnectionStringParser.ParseConnectionString(Settings.ConnString);
 
             if (Settings.DbVendor.ToLower() == "oracle")
             {

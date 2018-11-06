@@ -90,7 +90,7 @@ namespace Udir.XmlDataImport.Core.Test
         public void must_replace_env_variable_in_connection_string()
         {
             var connString = "Data Source=localhost:1521/XE;User Id=hr;Password=blabla%WINDIR%blabla";
-            var parsedConnString = ConnectionStringParser.parseConnectionString(connString);
+            var parsedConnString = ConnectionStringParser.ParseConnectionString(connString);
 
             Assert.NotEqual(connString, parsedConnString);
         }
