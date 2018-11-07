@@ -7,7 +7,7 @@ namespace UDir.XmlDataImport
     {
         public static string ParseConnectionString(string connectionString)
         {
-            var regex = new Regex(@"%[A-Za-z0-9\(\)]*%", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var regex = new Regex(@"%[A-Za-z0-9_\(\)]*%", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var matches = regex.Matches(connectionString);
 
             for(var i = 0; i < matches.Count; i++)

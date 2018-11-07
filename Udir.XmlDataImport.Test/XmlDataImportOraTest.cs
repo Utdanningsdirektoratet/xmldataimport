@@ -39,7 +39,7 @@ namespace Udir.XmlDataImport.Test
         {
             var variableValueCount = _xmlInsert.DataContext.GetCount(new List<string>
             {
-                "SELECT COUNT(*) FROM HR.Employees WHERE FIRST_NAME = 'Odd'"
+                "SELECT COUNT(*) FROM Employees WHERE FIRST_NAME = 'Odd'"
             });
 
             Assert.AreEqual(1, variableValueCount, "Failed to insert the expected variable values when" +
@@ -50,7 +50,7 @@ namespace Udir.XmlDataImport.Test
         public void must_insert_expected_string_code_variable_value()
         {
             var lastNameValue = _xmlInsert.DataContext.ExecuteScalar(
-                string.Format("SELECT LAST_NAME FROM HR.Employees WHERE LAST_NAME = '{0}'", _lastName)
+                string.Format("SELECT LAST_NAME FROM Employees WHERE LAST_NAME = '{0}'", _lastName)
             );
 
             Assert.AreEqual(_lastName, lastNameValue.ToString(), "Failed to insert string variable value from code when" +
@@ -61,7 +61,7 @@ namespace Udir.XmlDataImport.Test
         public void must_insert_expected_int_code_variable_value()
         {
             var ageValue = _xmlInsert.DataContext.ExecuteScalar(
-                string.Format("SELECT MAX_SALARY FROM HR.Jobs WHERE MAX_SALARY = {0}", _maxSalary)
+                string.Format("SELECT MAX_SALARY FROM Jobs WHERE MAX_SALARY = {0}", _maxSalary)
             );
 
             Assert.AreEqual(_maxSalary, int.Parse(ageValue.ToString()), "Failed to insert int variable value from code when" +
