@@ -26,6 +26,9 @@
     <None Update="examplexmld\Persons.xmld">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="examplexmld\ora\Employees.xmld">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

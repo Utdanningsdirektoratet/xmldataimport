@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Run against the standard Oracle HR example schema -->
+<Root>
+  <Variables>DECLARE first_name VARCHAR2(10) := 'Odd';</Variables>
+  <Setup>DELETE FROM EMPLOYEES WHERE EMAIL = 'ola@nordman.no';DELETE FROM JOBS WHERE JOB_ID = 'TEST_AUTO';</Setup>
+  <JOBS>
+    <JOB_ID>TEST_AUTO</JOB_ID>
+    <JOB_TITLE>Test automator</JOB_TITLE>
+    <MIN_SALARY>4200</MIN_SALARY>
+    <MAX_SALARY>TO_NUMBER(variable('maxSalary'))</MAX_SALARY>
+  </JOBS>
+  <EMPLOYEES>
+    <EMPLOYEE_ID>(EMPLOYEES_SEQ.NextVal)</EMPLOYEE_ID>
+    <FIRST_NAME>(first_name)</FIRST_NAME>
+    <LAST_NAME>variable('lastName')</LAST_NAME>
+    <EMAIL>ola@nordman.no</EMAIL>
+    <PHONE_NUMBER>867-5309</PHONE_NUMBER>
+    <HIRE_DATE>TO_DATE('2003/07/09', 'yyyy/mm/dd')</HIRE_DATE>
+    <JOB_ID>TEST_AUTO</JOB_ID>
+  </EMPLOYEES>
+</Root>
