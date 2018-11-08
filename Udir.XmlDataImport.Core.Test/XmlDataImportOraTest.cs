@@ -13,7 +13,6 @@ namespace Udir.XmlDataImport.Core.Test
         private static int _maxSalary = 9000;
         private static string _lastName = "Nordmann";
 
-
         public XmlDataImportOraTest()
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -28,7 +27,7 @@ namespace Udir.XmlDataImport.Core.Test
         }
         public void Dispose()
         {
-            _xmlInsert.Dispose();
+           _xmlInsert.Dispose();
         }
 
         [Fact]

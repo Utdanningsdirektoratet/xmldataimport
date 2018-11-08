@@ -16,6 +16,6 @@
     <EMAIL>ola@nordman.no</EMAIL>
     <PHONE_NUMBER>867-5309</PHONE_NUMBER>
     <HIRE_DATE>TO_DATE('2003/07/09', 'yyyy/mm/dd')</HIRE_DATE>
-    <JOB_ID>TEST_AUTO</JOB_ID>
+    <JOB_ID>(SELECT JOB_ID FROM JOBS WHERE JOB_TITLE='Test automator')</JOB_ID>
   </EMPLOYEES>
 </Root>
