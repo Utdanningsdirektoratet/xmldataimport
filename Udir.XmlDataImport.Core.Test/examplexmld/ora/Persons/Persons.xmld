@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Set up with script SetupOracle.sql -->
+<Root>
+  <Variables>DECLARE p_age numeric(10) := 12;</Variables>
+  <Setup>DELETE FROM Jobs;DELETE FROM Persons WHERE Age &gt; p_age;</Setup>
+  <Persons>
+    <FirstName>James</FirstName>
+    <LastName>Ohlsen</LastName>
+    <Age>23</Age>
+  </Persons>
+  <Persons>
+    <FirstName>Åggie</FirstName>
+    <LastName>variable('otherLastName')</LastName>
+    <Age>56</Age>
+  </Persons>
+  <Persons>
+    <FirstName>Ærild</FirstName>
+    <LastName>Smith</LastName>
+    <Age>TO_NUMBER(variable('age'))</Age>
+  </Persons>
+  <Persons>
+    <FirstName>Alex</FirstName>
+    <LastName>Smith</LastName>
+    <Age>43</Age>
+  </Persons>
+  <Jobs>
+    <PersonID>(SELECT ID FROM Persons WHERE FirstName = 'Alex' AND age = 43)</PersonID>
+    <PositionID>1234</PositionID>
+    <Description>Blabla</Description>
+    <Location>Oslo</Location>
+  </Jobs>
+</Root>

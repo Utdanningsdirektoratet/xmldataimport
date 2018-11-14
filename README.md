@@ -1,5 +1,5 @@
 # xmldataimport
-XmlDataImport kjører test data inn i en SQL Server database for datadreven automatiske tester. Verktøyet kan brukes enten fra kommandolinje eller inn i en automatiserte test. 
+XmlDataImport kjører test data inn i en SQL Server eller Oracle database for datadreven automatiske tester. Verktøyet kan brukes enten fra kommandolinje eller inn i en automatiserte test. 
 
 Verktøyet støtter: 
 - innsetting og sletting
@@ -7,6 +7,7 @@ Verktøyet støtter:
 - funksjoner
 - variable 
 - fremmende nøkler
+- Sql Server og Oracle
 
 XmlDataImport forenkler oppretting og vedlikehold av automatiserte data-drevet tester. Det en spesielt nyttig for testdekning når en del av løsningens logikk ligger i lagrete prosedyrer.  
 Fra SQL Server Management Studio er det lett å ekstraher XML test data for bruk med verktøyet  
@@ -57,9 +58,13 @@ Når du kjører XmlDataImport i en test eller fra kommando linjen, må du ha lit
 	<configuration>
 	  	<connectionStrings>
 	    	<add name="MYDB" connectionString="Data Source=(local);Initial Catalog=MYDB;Integrated Security=True;User Instance=False" providerName="System.Data.SqlClient" />
+			<add name="OracleTest" providerName="Oracle.ManagedDataAccess.Client"
+      connectionString="Data Source=localhost:1521/XE;User Id=hr;Password=hr"/>
 	  	</connectionStrings>
 	  	<appSettings>
     		<add key="DBInstanceName" value="MYDB" />
+			<!--<add key="DBInstanceName" value="OracleTest"/>
+			<add key="DBVendor" value="Oracle"/>-->
     		<add key="ignoreNoChange" value="false" />
 	  	</appSettings>
 	</configuration>
@@ -68,6 +73,7 @@ Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i
 
 	No records inserted. There were 0 statements issued against the DB. Paths used: Persons.xmld
 
+Velg den riktige ``connectionString`` for din database (Sql Server eller Oracle)
 
 ## XMLD fil
 ### XMLD fil eksempel
@@ -105,7 +111,7 @@ Parameteren ```ignoreNoChange``` styrer oppførsel når det blir ingen endring i
 En XLMD fil innholder:
 
 1. En ````<Root>```` tag på begynnelse og slut
-1. Valgfritt ````<Variables>```` tag som inneholder deklarasjoner av variabler. Variablene er tilgjengelig innenfor __alle__ andre taggene. 
+1. Valgfritt ````<Variables>```` tag som inneholder deklarasjoner av variabler. Variablene er tilgjengelig innenfor __alle__ andre taggene.
 1. En valgfrit ````<Startup>```` tag med SQL som innhold. Applikasjonen kjører denne SQL i en egen transaksjon **før** innsetting av tabell data.
 1. En valgfrit ````<Setup>```` tag med opprydding SQL som innhold. Applikasjonen kjører denne SQL i en egen transaksjon **før** og **etter** innsetting av tabell data.
 1. En valgfrit ````<Teardown>```` tag med opprydding SQL som innhold. Applikasjonen kjører denne SQL i en egen transaksjon **på siste**.
@@ -120,6 +126,11 @@ En XLMD fil innholder:
   -  som inneholder ekspresjoner mellom parenteser (f.eks. ```(select cast(N'' as xml).value('xs:base64Binary("JVBERigoyNTcyMgolJUVPRgo=")```)  
 
 Bruk funksjoner eller ekspresjoner når du ikke vil innsette kolonneverdien som en string: (```Convert(uniqueidentifier, '12345678-1234-1234-1234-123456789123')```)   
+
+For Oracle, for dato kolonner, bruk:
+	<employees>
+		<HIRE_DATE>TO_DATE('2003/07/09', 'yyyy/mm/dd')</HIRE_DATE>
+	</employees>
 
 #### Håndtering av kolonner med fremmede nøkler
 Bruk en ```SELECT``` mellom ```(...)```:  
@@ -141,10 +152,23 @@ Bruk en ```SELECT``` mellom ```(...)```:
 Du kan, om du vil, definere SQL variabler inn i ````<Variables>```` tag:  
  
 	<Variables>Declare @age int = 12</Variables>
+	
+For Oracle, bruk:
 
+	<Variables>DECLARE p_age numeric(10) := 12; emp_id NUMBER(8,2) := 207;</Variables>
+
+Om du bruker variable inn i ```<TabellNavn>``` elementene, da bruk parenteser rundt variable navn:
+
+	<Persons>
+      <ID>3</ID>
+      <FirstName>Ærild</FirstName>
+      <LastName>Smith</LastName>
+      <Age>(p_age)</Age>
+	</Persons>
+	
 Disse variablene skal være tilgjengelig i alle andre steder (````<Startup>````, ````<Setup>````, ````<Teardown>```` og også inn i ```<TabellNavn>```).
 
-Verktøyet også støtter en helt annen slags variable du kan skytte inn fra din enhetstestskode.  Du kan definere variabler i en dictionary argument sendt inn i konstruktøren til XmlInsert:  
+Verktøyet også støtter en helt annen slags variable du kan skytte inn fra din enhetstestskode.  Denne kan til å med brukes med en Oracle database. Du kan definere variabler i en dictionary argument sendt inn i konstruktøren til XmlInsert:  
 
 	_xmlDataImport = new XmlInsert(true,
 			new Dictionary<string, object> { { "StudentId", _studentId } }, //Variable i XMLD fil
@@ -216,3 +240,19 @@ Om du har auto-genererte id'er i din database, bare slett dem og verktøyet vil 
 		<Location>Larvik</Location>
 	  </Schools>
 	</Root>
+	
+## Oppretting av XML data filer med Oracle
+Du kan bruke følge denne guide for å hente ut XML data fra en Oracle database.
+
+	Du kan bruke den følgende møt den standard Oracle HR example schema:
+	SELECT XMLElement("Root", 
+	XMLAgg(XMLElement("Persons",
+	XMLForest(FIRSTNAME, LASTNAME, AGE))))
+	FROM PERSONS;
+	
+	SELECT XMLElement("Root", 
+	XMLAgg(XMLElement("Jobs",
+	XMLForest(PersonID, PositionID, Description, Location))))
+	FROM Jobs;	
+
+NB: For at dette skal kjøre denne SQL, i, for eksempel DBeaver, trenger å refererer til xdb6.jar og xmlparserv2.jar i dine driver instillinger. Se diskusjon som forklarer hvordan du kan få takk i disse bibliotekene her: https://stackoverflow.com/a/28106846

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDir.XmlDataImport", "UDir.XmlDataImport\UDir.XmlDataImport.csproj", "{424CD218-2CB4-4497-B708-F39EE2BFA7DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDir.XmlDataImport.Console", "UDir.XmlDataImport.Console\UDir.XmlDataImport.Console.csproj", "{D6AB08E2-2DC6-4F40-A791-090AA5C8C062}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udir.XmlDataImport.Test", "Udir.XmlDataImport.Test\Udir.XmlDataImport.Test.csproj", "{F2861313-65D6-44EA-9AC3-12D1F8528CF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Udir.XmlDataImport.Core.Test", "Udir.XmlDataImport.Core.Test\Udir.XmlDataImport.Core.Test.csproj", "{61C15E02-EE67-4CC2-947F-EBA2DF372864}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,11 +29,16 @@ Global
 		{F2861313-65D6-44EA-9AC3-12D1F8528CF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2861313-65D6-44EA-9AC3-12D1F8528CF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2861313-65D6-44EA-9AC3-12D1F8528CF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61C15E02-EE67-4CC2-947F-EBA2DF372864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61C15E02-EE67-4CC2-947F-EBA2DF372864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61C15E02-EE67-4CC2-947F-EBA2DF372864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61C15E02-EE67-4CC2-947F-EBA2DF372864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+		SolutionGuid = {53D21802-AA3C-42C0-92B6-0CCD372FB2D0}
 	EndGlobalSection
 EndGlobal
