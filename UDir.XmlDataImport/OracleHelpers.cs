@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace UDir.XmlDataImport
 {
@@ -21,11 +22,12 @@ namespace UDir.XmlDataImport
 
             return sqlPackInserts;
         }
+
         static string FormatAnonBlock(string userData)
         {
             string[] blocks = userData.Split('|');            
             
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (blocks.Length == 2)
             {
@@ -34,7 +36,7 @@ namespace UDir.XmlDataImport
             
             sb.Append("BEGIN ");
             string[] statements = blocks.Length == 1 ? blocks[0].Split(';') : blocks[1].Split(';');
-            foreach (string s in statements.Where(x => !x.ToLower().StartsWith("declare")))
+            foreach (string s in statements.Where(x => IsNotEmptyText(x) && !x.ToLower().StartsWith("declare")))
             {
                 if (s.Length > 0)
                 {
@@ -47,13 +49,18 @@ namespace UDir.XmlDataImport
 
         public static string DelimitVariableBlock(string variableDeclarations, string joinedQuery)
         {
-            if (Settings.DbVendor.ToLower() == "oracle" && !joinedQuery.ToLower().StartsWith("declare"))
+            if (IsNotEmptyText(variableDeclarations) && Settings.DbVendor.ToLower() == "oracle" && !joinedQuery.ToLower().StartsWith("declare"))
             {
-                return variableDeclarations + "|" + joinedQuery;
+                return variableDeclarations.Trim() + "|" + joinedQuery.Trim();
             }
 
-            return variableDeclarations + "\n" + joinedQuery;
+            return variableDeclarations.Trim() + "\n" + joinedQuery.Trim();
         }
-      
+
+        static bool IsNotEmptyText(string statement)
+        {
+            var expr = new Regex("[A-Za-z]");
+            return expr.IsMatch(statement);
+        }
     }
 }
