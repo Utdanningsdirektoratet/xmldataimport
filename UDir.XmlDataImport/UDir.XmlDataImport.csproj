@@ -9,14 +9,14 @@
     <Product>XmlDataImport</Product>
     <Description>XmlDataImport kjører test data inn i en SQL Server database for datadreven automatiske tester. Verktøyet kan brukes enten fra kommandolinje eller inn i en automatiserte test</Description>
     <Copyright>Copyright 2017</Copyright>
-    <Version>1.3.4.0</Version>
-    <AssemblyVersion>1.3.4.0</AssemblyVersion>
-    <FileVersion>1.3.4.0</FileVersion>
+    <Version>1.3.5.0</Version>
+    <AssemblyVersion>1.3.5.0</AssemblyVersion>
+    <FileVersion>1.3.5.0</FileVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Authors>James Westfall</Authors>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Utdanningsdirektoratet/xmldataimport</PackageProjectUrl>
-    <PackageReleaseNotes>Fixed Oracle parsing error</PackageReleaseNotes>
+    <PackageReleaseNotes>New constructor for when using variables dictionary</PackageReleaseNotes>
     <PackageTags>Csharp test-automation</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -74,6 +74,17 @@ namespace UDir.XmlDataImport
         {
         }
 
+        /// <summary>
+        /// Use this constructor to insert a .xmld file or one or more directories of .xmld file 
+        /// contents into the database.
+        /// </summary>        
+        /// <param name="variables">Collection of variables to use in script</param>
+        /// <param name="path">Directory, individual file path, array of individual files 
+        /// or array of directories</param>
+        public XmlInsert(Dictionary<string, object> variables, params string[] path) : this(new FileProvider(), new ImportDataContext(), false, variables, path)
+        {
+        }
+
         XmlInsert(IFileProvider fileProvider, IImportDataContext dataContext, bool ignoreNoChange, Dictionary<string, object> variables = null, params string[] path)
         {            
             _paths = path;

@@ -17,7 +17,7 @@ namespace Udir.XmlDataImport.Test
         public static void Startup(TestContext context)
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            _xmlInsert = new XmlInsert(true,
+            _xmlInsert = new XmlInsert(
                 new Dictionary<string, object>
                 {
                     {"age", _age},
