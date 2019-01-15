@@ -172,11 +172,12 @@ namespace UDir.XmlDataImport
                 valueList.Clear();
             }
 
-            var variableDeclarations = GetVariableDeclarations(variables);
-
-            var joinedQuery = string.Join("\n", tempQueries);
-            
-            sqlPack.Inserts.Add(OracleHelpers.DelimitVariableBlock(variableDeclarations,joinedQuery));            
+            if (tempQueries.Any())
+            {
+                var variableDeclarations = GetVariableDeclarations(variables);
+                var joinedQuery = string.Join("\n", tempQueries);
+                sqlPack.Inserts.Add(OracleHelpers.DelimitVariableBlock(variableDeclarations, joinedQuery));
+            }
         }
 
         private void ExecPack(SqlPack sqlPack)
