@@ -7,16 +7,16 @@
     <AssemblyTitle>XmlDataImport</AssemblyTitle>
     <Company>Utdanningsdirektoratet</Company>
     <Product>XmlDataImport</Product>
-    <Description>XmlDataImport kjører test data inn i en SQL Server database for datadreven automatiske tester. Verktøyet kan brukes enten fra kommandolinje eller inn i en automatiserte test</Description>
+    <Description>XmlDataImport kjører test data inn i en SQL Server eller Oracle databaser for datadreven automatiske tester. Verktøyet kan brukes enten fra kommandolinje eller inn i en automatiserte test</Description>
     <Copyright>Copyright 2017</Copyright>
-    <Version>1.3.5.0</Version>
-    <AssemblyVersion>1.3.5.0</AssemblyVersion>
+    <Version>1.4.0.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
     <FileVersion>1.3.5.0</FileVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Authors>James Westfall</Authors>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Utdanningsdirektoratet/xmldataimport</PackageProjectUrl>
-    <PackageReleaseNotes>New constructor for when using variables dictionary</PackageReleaseNotes>
+    <PackageReleaseNotes>Multi-connection: now possible to specify id of connection string to use</PackageReleaseNotes>
     <PackageTags>Csharp test-automation</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

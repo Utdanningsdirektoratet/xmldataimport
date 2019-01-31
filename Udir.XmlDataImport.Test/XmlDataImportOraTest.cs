@@ -6,8 +6,7 @@ using UDir.XmlDataImport;
 
 namespace Udir.XmlDataImport.Test
 {
-    //Uncomment if running Oracle
-    //[TestClass]
+    [TestClass]
     public class XmlDataImportOraTest
     {
         private static XmlInsert _xmlInsert;
@@ -24,6 +23,8 @@ namespace Udir.XmlDataImport.Test
                     {"maxSalary", _maxSalary},
                     {"lastName", _lastName }
                 },
+                "OracleTest",
+                "Oracle",
                 path + "\\examplexmld\\ora"
                 );
         }

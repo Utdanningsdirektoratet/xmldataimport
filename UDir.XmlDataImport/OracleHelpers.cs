@@ -7,9 +7,9 @@ namespace UDir.XmlDataImport
 {
     public static class OracleHelpers
     {
-        public static List<string> Blockify(List<string> sqlPackInserts)
+        public static List<string> Blockify(List<string> sqlPackInserts, Settings settings)
         {
-            if (Settings.DbVendor.ToLower() == "oracle")
+            if (settings.DbVendor.ToLower() == "oracle")
             {
                 var blocks = new List<string>();
                 sqlPackInserts.ForEach(x =>
@@ -47,9 +47,9 @@ namespace UDir.XmlDataImport
             return sb.ToString();
         }
 
-        public static string DelimitVariableBlock(string variableDeclarations, string joinedQuery)
+        public static string DelimitVariableBlock(string variableDeclarations, string joinedQuery, Settings settings)
         {
-            if (IsNotEmptyText(variableDeclarations) && Settings.DbVendor.ToLower() == "oracle" && !joinedQuery.ToLower().StartsWith("declare"))
+            if (IsNotEmptyText(variableDeclarations) && settings.DbVendor.ToLower() == "oracle" && !joinedQuery.ToLower().StartsWith("declare"))
             {
                 return variableDeclarations.Trim() + "|" + joinedQuery.Trim();
             }
