@@ -17,14 +17,18 @@ namespace Udir.XmlDataImport.Test
         public static void Startup(TestContext context)
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            _xmlInsert = new XmlInsert(
-                new Dictionary<string, object>
+            _xmlInsert = new XmlInsert(new RunConfig
+            {
+                Variables = new Dictionary<string, object>
                 {
                     {"age", _age},
-                    {"otherLastName", _otherLastName }
+                    {"otherLastName", _otherLastName}
                 },
-                path + "\\examplexmld" //Currently just contains Persons.xmld. Add \\ora\\Persons for Oracle
-                );
+                Paths = new List<string>
+                {
+                    path + "\\examplexmld" //Currently just contains Persons.xmld. Add \\ora\\Persons for Oracle
+                }
+            });
         }
 
         [ClassCleanup]

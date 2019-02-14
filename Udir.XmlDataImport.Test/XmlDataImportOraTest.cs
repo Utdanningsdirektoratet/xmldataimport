@@ -17,16 +17,20 @@ namespace Udir.XmlDataImport.Test
         public static void Startup(TestContext context)
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            _xmlInsert = new XmlInsert(true,
-                new Dictionary<string, object>
+            _xmlInsert = new XmlInsert(new RunConfig
+            {
+                Variables = new Dictionary<string, object>
                 {
                     {"maxSalary", _maxSalary},
                     {"lastName", _lastName }
                 },
-                "OracleTest",
-                "Oracle",
-                path + "\\examplexmld\\ora"
-                );
+                ConnectionStringId = "OracleTest2",
+                DbVendor = "Oracle",
+                Paths = new List<string>
+                {
+                    path + "\\examplexmld\\ora"
+                }
+            });
         }
 
         [ClassCleanup]
@@ -80,7 +84,7 @@ namespace Udir.XmlDataImport.Test
                 {
                     {"lastName", lastName }
                 },
-                "OracleTest",
+                "OracleTest2",
                 "Oracle",
                 $@"<?xml version='1.0' encoding='utf-8' ?>
                     <Root>

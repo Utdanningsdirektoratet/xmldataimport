@@ -79,6 +79,10 @@ namespace UDir.XmlDataImport
             
         }
 
+        public XmlInsert(RunConfig config) : this(new FileProvider(), new ImportDataContext(new Settings(config.ConnectionStringId, config.DbVendor)), config.IgnoreNoChange, config.Variables, config.Paths.ToArray())
+        {
+        }
+
         /// <summary>
         /// Use this constructor to insert a .xmld file or one or more directories of .xmld file 
         /// contents into the database.
