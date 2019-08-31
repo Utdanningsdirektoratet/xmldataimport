@@ -22,7 +22,7 @@ namespace Udir.XmlDataImport.Core.Test
                     {"maxSalary", _maxSalary},
                     {"lastName", _lastName }
                 },
-                "OracleTest2",
+                "OracleTest",
                 "Oracle",
                 path + "\\examplexmld\\ora"
                 );

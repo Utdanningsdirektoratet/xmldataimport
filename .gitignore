@@ -26,3 +26,4 @@ TestResults
 .vscode/tasks.json
 .vscode/launch.json
 .vs
+nuget.exe
