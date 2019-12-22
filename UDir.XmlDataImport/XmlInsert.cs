@@ -74,6 +74,26 @@ namespace UDir.XmlDataImport
         {
         }
 
+        public XmlInsert(bool ignoreNoChange, Dictionary<string, object> variables, string connectionStringId, string dbVendor, params string[] path): this(new FileProvider(), new ImportDataContext(new Settings(connectionStringId, dbVendor)), ignoreNoChange, variables, path)
+        {
+            
+        }
+
+        public XmlInsert(RunConfig config) : this(new FileProvider(), new ImportDataContext(new Settings(config.ConnectionStringId, config.DbVendor)), config.IgnoreNoChange, config.Variables, config.Paths.ToArray())
+        {
+        }
+
+        /// <summary>
+        /// Use this constructor to insert a .xmld file or one or more directories of .xmld file 
+        /// contents into the database.
+        /// </summary>        
+        /// <param name="variables">Collection of variables to use in script</param>
+        /// <param name="path">Directory, individual file path, array of individual files 
+        /// or array of directories</param>
+        public XmlInsert(Dictionary<string, object> variables, params string[] path) : this(new FileProvider(), new ImportDataContext(), false, variables, path)
+        {
+        }
+
         XmlInsert(IFileProvider fileProvider, IImportDataContext dataContext, bool ignoreNoChange, Dictionary<string, object> variables = null, params string[] path)
         {            
             _paths = path;
@@ -93,12 +113,12 @@ namespace UDir.XmlDataImport
             {
                 if (_sqlPack.SetupScripts != null)
                 {
-                    RunScriptPack(OracleHelpers.Blockify(_sqlPack.SetupScripts));
+                    RunScriptPack(OracleHelpers.Blockify(_sqlPack.SetupScripts, DataContext.Settings));
                 }
 
                 if (_sqlPack.TearDownScripts != null)
                 {
-                    RunScriptPack(OracleHelpers.Blockify(_sqlPack.TearDownScripts));
+                    RunScriptPack(OracleHelpers.Blockify(_sqlPack.TearDownScripts, DataContext.Settings));
                 }
             }
         }
@@ -161,22 +181,23 @@ namespace UDir.XmlDataImport
                 valueList.Clear();
             }
 
-            var variableDeclarations = GetVariableDeclarations(variables);
-
-            var joinedQuery = string.Join("\n", tempQueries);
-            
-            sqlPack.Inserts.Add(OracleHelpers.DelimitVariableBlock(variableDeclarations,joinedQuery));            
+            if (tempQueries.Any())
+            {
+                var variableDeclarations = GetVariableDeclarations(variables);
+                var joinedQuery = string.Join("\n", tempQueries);
+                sqlPack.Inserts.Add(OracleHelpers.DelimitVariableBlock(variableDeclarations, joinedQuery, DataContext.Settings));
+            }
         }
 
         private void ExecPack(SqlPack sqlPack)
         {
             var changedCount = 0;
 
-            changedCount += RunScriptPack(OracleHelpers.Blockify(sqlPack.StartupScripts));
+            changedCount += RunScriptPack(OracleHelpers.Blockify(sqlPack.StartupScripts, DataContext.Settings));
 
-            changedCount += RunScriptPack(OracleHelpers.Blockify(sqlPack.SetupScripts));
+            changedCount += RunScriptPack(OracleHelpers.Blockify(sqlPack.SetupScripts, DataContext.Settings));
 
-            changedCount += DataContext.ExecBatch(OracleHelpers.Blockify(sqlPack.Inserts));
+            changedCount += DataContext.ExecBatch(OracleHelpers.Blockify(sqlPack.Inserts, DataContext.Settings));
 
             if (!_ignoreNoChange && changedCount == 0)
             {
@@ -246,13 +267,13 @@ namespace UDir.XmlDataImport
             return DataContext.ExecBatch(pack);
         }
 
-        private static void AddScripts(List<string> collection, string currentSetupSql, List<string> variables = null)
+        private void AddScripts(List<string> collection, string currentSetupSql, List<string> variables = null)
         {
 
             if (!string.IsNullOrEmpty(currentSetupSql))
             {
                 var variableDeclaration = GetVariableDeclarations(variables);
-                collection.Add(OracleHelpers.DelimitVariableBlock(variableDeclaration, currentSetupSql));
+                collection.Add(OracleHelpers.DelimitVariableBlock(variableDeclaration, currentSetupSql, DataContext.Settings));
             }
         }
 

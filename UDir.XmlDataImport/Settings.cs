@@ -3,33 +3,46 @@ using Microsoft.Extensions.Configuration;
 
 namespace UDir.XmlDataImport
 {
-    static class Settings
+    public class Settings
     {
-        private static IConfigurationRoot configuration;
-        private static string DBInstanceNameKeyName = "DBInstanceName";
-        private static string _dBInstanceName;
+        private IConfigurationRoot configuration;
+        private string DBInstanceNameKeyName = "DBInstanceName";        
 
-        private static string _dbVendor;
-        private static string DBVendorKeyName = "DBVendor";
+        private string _dbVendor;
+        private string DBVendorKeyName = "DBVendor";
+        private string _connectionStringId;
 
-        static Settings()
+        public Settings()
         {
             configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();            
         }
 
-        /// <summary>
-        /// Returns a string from the config file identifying the name of the DB instance.
-        /// </summary>                
-        public static string DbInstanceName => _dBInstanceName ?? (_dBInstanceName = configuration[DBInstanceNameKeyName]);
+        public Settings(string connectionStringId, string dbVendor): this()
+        {
+            _connectionStringId = connectionStringId;
+            _dbVendor = dbVendor;
+        }
 
         /// <summary>
         /// Returns a string from the config file identifying the name of the DB instance.
         /// </summary>                
-        public static string DbVendor => _dbVendor ?? (_dbVendor = configuration[DBVendorKeyName] ?? string.Empty);
+        public string DbInstanceName => _connectionStringId ?? (_connectionStringId = configuration[DBInstanceNameKeyName]);
 
-        public static string ConnString => configuration.GetConnectionString(DbInstanceName);
+        /// <summary>
+        /// Returns a string from the config file identifying the name of the DB instance.
+        /// </summary>                
+        public string DbVendor
+        {
+            get
+            {
+                return _dbVendor ?? (_dbVendor = configuration[DBVendorKeyName] ?? string.Empty);
+            }
+            set { _dbVendor = value; }
+        }
+
+        public string ConnString => configuration.GetConnectionString(DbInstanceName);
     }
 }
 #endif
@@ -39,32 +52,39 @@ using System.Configuration;
 
 namespace UDir.XmlDataImport
 {
-    static class Settings
-    {        
-        private static string DBInstanceNameKeyName = "DBInstanceName";
-        private static string _dBInstanceName;
+    public class Settings
+    {
+        public Settings()
+        {
+        }
 
-        private static string _dbVendor;
-        private static string DBVendorKeyName = "DBVendor";
-        private static string _connString;
+        public Settings(string connectionStringId, string dbVendor)
+        {
+            _connectionStringId = connectionStringId;
+            _dbVendor = dbVendor;
+        }
+        private string DBInstanceNameKeyName = "DBInstanceName";
+
+        private string _dbVendor;
+        private string DBVendorKeyName = "DBVendor";
+        private string _connectionStringId;
 
         /// <summary>
         /// Returns a string from the config file identifying the key of the connection string  to use.
         /// </summary>                
-        public static string DbInstanceName
+        public string DbInstanceName
         {
             get
             {
-                return _dBInstanceName ?? (_dBInstanceName =  ConfigurationManager.AppSettings[DBInstanceNameKeyName]);                
+                return _connectionStringId ?? (_connectionStringId =  ConfigurationManager.AppSettings[DBInstanceNameKeyName]);                
             }
         }
 
-
         /// <summary>
-        /// Returns a string from the config file identifying the name of the database vendor (MSSQL or Oracle).
-        //  Value defaults to MSSQL
-        /// </summary>
-        public static string DbVendor
+        /// Returns a string from the config file identifying the name of the database vendor(MSSQL or Oracle).
+        /// Value defaults to MSSQL
+        /// </summary>        
+        public string DbVendor
         {
             get
             {
@@ -75,13 +95,7 @@ namespace UDir.XmlDataImport
         /// <summary>
         /// Returns connecton string from config file identified by the value provided for DB instance.
         /// </summary>
-        public static string ConnString 
-        {
-            get
-            {
-                return _connString ?? (_connString = ConfigurationManager.ConnectionStrings[DbInstanceName].ConnectionString);
-            }
-        }
+        public string ConnString => ConfigurationManager.ConnectionStrings[DbInstanceName].ConnectionString;
     }
 }
 #endif

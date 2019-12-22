@@ -13,17 +13,33 @@ namespace UDir.XmlDataImport
         int ExecBatch(List<string> batch);
         object ExecuteScalar(string sql);
         int GetCount(List<string> batch);
+        Settings Settings { get; }
     }
     
-    class ImportDataContext : IImportDataContext
+    public class ImportDataContext : IImportDataContext
     {
-        private readonly Database _db;
-
+        private Database _db;
+       
+        private const string Oracle = "oracle";
         public ImportDataContext()
         {
-            var connString = ConnectionStringParser.ParseConnectionString(Settings.ConnString);
+            Init();   
+        }
 
-            if (Settings.DbVendor.ToLower() == "oracle")
+        public ImportDataContext(Settings settings)
+        {
+            Settings = settings;
+            Init();
+        }
+
+        public Settings Settings { get; private set; }
+
+        void Init()
+        {
+            Settings = Settings ?? new Settings();
+            var connString = ConnectionStringParser.ParseConnectionString(Settings.ConnString);            
+
+            if (Settings.DbVendor.ToLower() == Oracle)
             {
                 _db = new GenericDatabase(connString, new OracleClientFactory());
             }
@@ -32,6 +48,7 @@ namespace UDir.XmlDataImport
                 _db = new SqlDatabase(connString);
             }
         }
+
         public int GetCount(List<string> batch)
         {
             int count = 0;

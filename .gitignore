@@ -25,3 +25,5 @@ TestResults
 /Udir.XmlDataImport.Test/obj/Release
 .vscode/tasks.json
 .vscode/launch.json
+.vs
+nuget.exe

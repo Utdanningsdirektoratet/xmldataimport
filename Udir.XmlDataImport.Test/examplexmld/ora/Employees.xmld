@@ -1,8 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Run against the standard Oracle HR example schema -->
 <Root>
-  <Variables>DECLARE first_name VARCHAR2(10) := 'Odd'; emp_id NUMBER(8,2) := 207;</Variables>
-  <Setup>DELETE FROM EMPLOYEES WHERE EMPLOYEE_ID = emp_id;DELETE FROM JOBS WHERE JOB_ID = 'TEST_AUTO';</Setup>
+  <Variables>
+    DECLARE first_name VARCHAR2(10) := 'Odd';
+    emp_id NUMBER(8,2) := 207;
+  </Variables>
+  <Setup>
+    DELETE FROM EMPLOYEES WHERE EMPLOYEE_ID = emp_id;
+    DELETE FROM JOBS WHERE JOB_ID = 'TEST_AUTO';
+  </Setup>
   <JOBS>
     <JOB_ID>TEST_AUTO</JOB_ID>
     <JOB_TITLE>Test automator</JOB_TITLE>
