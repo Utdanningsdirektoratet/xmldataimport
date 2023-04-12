@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{424CD218-2CB4-4497-B708-F39EE2BFA7DF}</ProjectGuid>
     <AssemblyName>XmlDataImport</AssemblyName>
@@ -46,7 +46,7 @@
     <PackageReference Include="EnterpriseLibrary.Common" Version="6.0.1304.0" />
     <PackageReference Include="EnterpriseLibrary.Data" Version="6.0.1304.0" />
     <PackageReference Include="EntLibContrib.Data.Oracle.ManagedDataAccess" Version="6.0.0" />
-    <PackageReference Include="Oracle.ManagedDataAccess" Version="18.3.0" />   
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="21.9.0" />   
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
